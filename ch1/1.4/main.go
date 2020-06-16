@@ -19,6 +19,7 @@ func main() {
 		counts := make(map[string]int)
 
 		countlines(f, counts)
+		f.Close()
 	}
 
 }
