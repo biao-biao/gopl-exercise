@@ -21,25 +21,33 @@ const (
 var sin30, cos30 = math.Sin(angle), math.Cos(angle) // sin(30°), cos(30°)
 
 func main() {
+	color := "#FFFFFF"
+
 	if len(os.Args) > 1 && os.Args[1] == "web" {
 		//!+http
 		handler := func(w http.ResponseWriter, r *http.Request) {
 			if err := r.ParseForm(); err != nil {
 				log.Print(err)
 			}
+			for k, v := range r.Form {
+				if k == "color" {
+					fmt.Println(v)
+					color = "#" + v[0]
+				}
+			}
 
 			w.Header().Set("Content-type", "image/svg+xml")
-			surface(w)
+			surface(w, color)
 		}
 		http.HandleFunc("/", handler)
 		//!-http
 		log.Fatal(http.ListenAndServe("0.0.0.0:8000", nil))
 		return
 	}
-	surface(os.Stdout)
+	surface(os.Stdout, color)
 }
 
-func surface(out io.Writer) {
+func surface(out io.Writer, color string) {
 	fmt.Fprintf(out, "<svg xmlns='http://www.w3.org/2000/svg' "+
 		"style='stroke: grey; fill: white; stroke-width: 0.7' "+
 		"width='%d' height='%d'>\n", width, height)
@@ -52,8 +60,8 @@ func surface(out io.Writer) {
 			if math.IsNaN(ax + ay + bx + by + cx + cy + dx + dy) {
 				continue
 			}
-			fmt.Fprintf(out, "<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
-				ax, ay, bx, by, cx, cy, dx, dy)
+			fmt.Fprintf(out, "<polygon points='%g,%g %g,%g %g,%g %g,%g' fill='%s'/>\n",
+				ax, ay, bx, by, cx, cy, dx, dy, color)
 		}
 	}
 	fmt.Fprintln(out, "</svg>")
