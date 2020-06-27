@@ -24,10 +24,6 @@ func main() {
 	if len(os.Args) > 1 && os.Args[1] == "web" {
 		//!+http
 		handler := func(w http.ResponseWriter, r *http.Request) {
-			if err := r.ParseForm(); err != nil {
-				log.Print(err)
-			}
-
 			w.Header().Set("Content-type", "image/svg+xml")
 			surface(w)
 		}
