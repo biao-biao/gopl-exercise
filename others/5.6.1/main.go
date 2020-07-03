@@ -1,5 +1,5 @@
 // See page 141.
-// and the quivalent sample in python https://www.toptal.com/python/interview-questions
+// and the equivalent sample in python https://www.toptal.com/python/interview-questions
 
 package main
 
